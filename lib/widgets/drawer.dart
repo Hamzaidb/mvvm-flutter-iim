@@ -13,7 +13,7 @@ class AppDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           const DrawerHeader(
-            decoration: BoxDecoration(color: Colors.blue),
+            decoration: BoxDecoration(color: Color.fromARGB(255, 0, 0, 0)),
             child: Text('Menu', style: TextStyle(color: Colors.white, fontSize: 24)),
           ),
           ListTile(
@@ -23,20 +23,16 @@ class AppDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.shopping_bag, color: Colors.orange),
-            title: const Text('Produits'),
+            title: const Text('Catalogue'),
             onTap: () => context.go('/products'),
           ),
-          ListTile(
-            leading: const Icon(Icons.pages),
-            title: const Text('Second Page'),
-            onTap: () => context.go('/second'),
-          ),
-          ListTile(
-            leading: const Icon(Icons.pages),
-            title: const Text('Third Page'),
-            onTap: () => context.go('/third'),
-          ),
           const Divider(),
+          ListTile(
+            leading: const Icon(Icons.person, color: Color.fromARGB(255, 0, 0, 0)),
+            title: const Text('Mon Profil'),
+            onTap: () => context.go('/profile'),
+          ),
+      
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
             title: const Text('Se déconnecter'),

@@ -3,12 +3,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:vraiauth/viewmodels/cart_viewmodel.dart';
+import 'package:vraiauth/viewmodels/orders_viewmodel.dart';
 import 'providers/auth_provider.dart';
 import 'router.dart';
 import 'firebase_options.dart';
 
 // ViewModels imports
 import 'viewmodels/products_viewmodel.dart';
+import 'viewmodels/orders_viewmodel.dart';
 
 /* Pages imports
 import 'pages/home_page.dart';
@@ -16,7 +18,7 @@ import 'pages/second_page.dart';
 import 'pages/third_page.dart';
 import 'pages/login_page.dart';
 import 'pages/register_page.dart';
-import 'pages/products_page.dart'; // 🔥 AJOUT : Nouvelle page produits
+import 'pages/products_page.dart'; 
 */
 
 void main() async {
@@ -37,12 +39,13 @@ class MyApp extends StatelessWidget {
       providers: [
         // 🛍️ ViewModel des produits (MVVM)
         ChangeNotifierProvider(create: (_) => ProductsViewModel()),
-        // 🔥 Autres ViewModels à ajouter plus tard (auth, panier, etc.)
+        //  Autres ViewModels à ajouter plus tard (auth, panier, etc.)
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => CartViewModel()),
         ProxyProvider<AuthProvider, AppRouter>(
           update: (_, authProvider, __) => AppRouter(authProvider),
         ),
+        ChangeNotifierProvider(create: (_) => OrdersViewModel()),
       ],
       child: Builder(
         builder: (context) {

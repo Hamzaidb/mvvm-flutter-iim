@@ -20,6 +20,8 @@ dependencies:
   http: ^1.2.1                  # Pour les appels API
   cached_network_image: ^3.3.1  # Images optimisées
   go_router: ^13.0.0            # Navigation avancée
+  shared_preferences: ^2.2.2  # Stockage local simple
+  flutter_svg: ^2.0.9        # Support SVG
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

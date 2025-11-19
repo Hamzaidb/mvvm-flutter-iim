@@ -12,6 +12,8 @@ import 'pages/third_page.dart';
 import 'providers/auth_provider.dart';
 import 'pages/product_detail_page.dart';
 import 'pages/cart_page.dart';
+import 'pages/checkout_page.dart';
+import 'pages/profile_page.dart';
 
 class AppRouter {
   final AuthProvider authProvider;
@@ -19,7 +21,7 @@ class AppRouter {
   AppRouter(this.authProvider);
 
   late final GoRouter router = GoRouter(
-    refreshListenable: authProvider, // 🔥 Le routeur écoute les changements d'auth
+    refreshListenable: authProvider, //  Le routeur écoute les changements d'auth
     initialLocation: '/',
     debugLogDiagnostics: true,
     redirect: (context, state) {
@@ -85,6 +87,14 @@ class AppRouter {
         path: '/cart',
         builder: (context, state) => const CartPage(),
       ),
+      GoRoute(
+        path: '/checkout',
+        builder: (context, state) => const CheckoutPage(),
+      ),
+      GoRoute(
+        path: '/profile',
+        builder: (context, state) => const ProfilePage(),
+      )
     ],
   );
 }

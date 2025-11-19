@@ -30,6 +30,22 @@ class Product {                                // Définition de la classe Produ
     );
   }
 
+  Map<String, dynamic> toJson() {
+    // Méthode pour convertir un Product en JSON (Map clé/valeur)
+    return {
+      'id': id,
+      'title': title,
+      'price': price,
+      'description': description,
+      'category': category,
+      'image': image,
+      'rating': {
+        'rate': rating.rate,
+        'count': rating.count,
+      },
+    };
+  }
+
   // Getter calculé : retourne le prix formaté avec 2 décimales + symbole €
   String get formattedPrice => '${price.toStringAsFixed(2)} €';
 
@@ -50,5 +66,13 @@ class Rating {
       rate: (json['rate'] as num).toDouble(),  // Convertit le champ "rate" en double
       count: json['count'] as int,             // Convertit le champ "count" en int
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    // Méthode pour convertir un Rating en JSON (Map clé/valeur)
+    return {
+      'rate': rate,
+      'count': count,
+    };
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../viewmodels/cart_viewmodel.dart';
+import 'package:go_router/go_router.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
@@ -19,7 +20,8 @@ class CartPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.delete_outline, color: Colors.red),
             onPressed: () {
-              // On demande confirmation avant de vider
+              if (Provider.of<CartViewModel>(context, listen: false).items.isEmpty) return;
+              
               showDialog(
                 context: context,
                 builder: (ctx) => AlertDialog(
@@ -47,7 +49,7 @@ class CartPage extends StatelessWidget {
       body: Consumer<CartViewModel>(
         builder: (context, cart, child) {
           // 1. Cas Panier Vide
-          if (cart.cartItems.isEmpty) {
+          if (cart.items.isEmpty) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -63,38 +65,73 @@ class CartPage extends StatelessWidget {
             );
           }
 
-          // 2. Liste des articles
+          // 2. Liste des articles regroupés
           return Column(
             children: [
               Expanded(
                 child: ListView.builder(
-                  itemCount: cart.cartItems.length,
+                  itemCount: cart.items.length,
                   itemBuilder: (context, index) {
-                    final product = cart.cartItems[index];
+                    // On récupère le CartItem (qui contient .product et .quantity)
+                    final cartItem = cart.items[index];
+                    final product = cartItem.product;
+
                     return Card(
                       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: ListTile(
-                        leading: CachedNetworkImage(
-                          imageUrl: product.image,
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.contain,
-                        ),
-                        title: Text(
-                          product.title,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text(
-                          '\$${product.price.toStringAsFixed(2)}',
-                          style: TextStyle(color: Colors.blue[700]),
-                        ),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.close, color: Colors.red),
-                          onPressed: () {
-                            cart.removeFromCart(product);
-                          },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            // Image
+                            CachedNetworkImage(
+                              imageUrl: product.image,
+                              width: 60,
+                              height: 60,
+                              fit: BoxFit.contain,
+                            ),
+                            const SizedBox(width: 16),
+                            
+                            // Titre et Prix Unitaire
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    product.title,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    '${product.price.toStringAsFixed(2)} € / unité',
+                                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            // Contrôles Quantité (- 1 +)
+                            Row(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.remove_circle_outline, color: Colors.blue),
+                                  onPressed: () {
+                                    cart.removeSingleItem(product);
+                                  },
+                                ),
+                                Text(
+                                  '${cartItem.quantity}',
+                                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.add_circle_outline, color: Colors.blue),
+                                  onPressed: () {
+                                    cart.addToCart(product);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     );
@@ -102,7 +139,7 @@ class CartPage extends StatelessWidget {
                 ),
               ),
 
-              // 3. Section Total & Commande (en bas)
+              // 3. Section Total & Commande
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -126,7 +163,7 @@ class CartPage extends StatelessWidget {
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          '\$${cart.totalPrice.toStringAsFixed(2)}',
+                          '${cart.totalPrice.toStringAsFixed(2)} €',
                           style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -148,15 +185,14 @@ class CartPage extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          // Simulation de commande
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Commande validée avec succès ! 🎉'),
-                              backgroundColor: Colors.green,
-                            ),
-                          );
-                          cart.clearCart(); // On vide le panier après achat
-                        },
+                            if (Provider.of<CartViewModel>(context, listen: false).items.isNotEmpty) {
+                              context.push('/checkout');
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Panier vide !')),
+                              );
+                            }
+                          },
                         child: const Text(
                           'COMMANDER',
                           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),

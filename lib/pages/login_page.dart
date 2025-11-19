@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// 🔥 AJOUT : Import Firebase Auth pour la connexion
+//   AJOUT : Import Firebase Auth pour la connexion
 import 'package:firebase_auth/firebase_auth.dart';
 import '../widgets/drawer.dart';
 import 'package:go_router/go_router.dart';
@@ -12,23 +12,23 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // 🔥 AJOUT : Controllers pour gérer les champs de texte
+  //   AJOUT : Controllers pour gérer les champs de texte
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  // 🔥 AJOUT : Variables pour gérer l'état de la page
+  //   AJOUT : Variables pour gérer l'état de la page
   bool _isLoading = false; // Indique si une connexion est en cours
   String _errorMessage = ''; // Stocke les messages d'erreur
 
   @override
   void dispose() {
-    // 🔥 AJOUT : Nettoie les controllers pour éviter les fuites mémoire
+    //   AJOUT : Nettoie les controllers pour éviter les fuites mémoire
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
-  // 🔥 AJOUT : Fonction principale de connexion
+  //   AJOUT : Fonction principale de connexion
   Future<void> _signIn() async {
     // Validation basique des champs
     if (_emailController.text.trim().isEmpty || _passwordController.text.isEmpty) {
@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
-      // 🔥 CŒUR : Tentative de connexion avec Firebase
+      //   CŒUR : Tentative de connexion avec Firebase
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text,
@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
         context.go('/');
       }
     } on FirebaseAuthException catch (e) {
-      // 🔥 AJOUT : Gestion des erreurs spécifiques Firebase
+      //   AJOUT : Gestion des erreurs spécifiques Firebase
       setState(() {
         _errorMessage = _getErrorMessage(e.code);
       });
@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  // 🔥 AJOUT : Fonction qui traduit les codes d'erreur Firebase en français
+  //   AJOUT : Fonction qui traduit les codes d'erreur Firebase en français
   // Liste des erreurs ici : https://firebase.google.com/docs/auth/admin/errors?hl=fr
   String _getErrorMessage(String errorCode) {
     switch (errorCode) {
@@ -108,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.blue[600],
         foregroundColor: Colors.white,
       ),
-      // 🔥 AJOUT : Le drawer est accessible même depuis la page de connexion
+      //   AJOUT : Le drawer est accessible même depuis la page de connexion
       drawer: const AppDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -123,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 30),
 
-            // 🔥 AJOUT : Champ email avec validation
+            //   AJOUT : Champ email avec validation
             TextField(
               controller: _emailController,
               decoration: const InputDecoration(
@@ -136,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 16),
 
-            // 🔥 AJOUT : Champ mot de passe
+            //   AJOUT : Champ mot de passe
             TextField(
               controller: _passwordController,
               decoration: const InputDecoration(
@@ -150,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 24),
 
-            // 🔥 AJOUT : Affichage conditionnel des messages d'erreur
+            //   AJOUT : Affichage conditionnel des messages d'erreur
             if (_errorMessage.isNotEmpty)
               Container(
                 width: double.infinity,
@@ -169,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
 
             if (_errorMessage.isNotEmpty) const SizedBox(height: 16),
 
-            // 🔥 AJOUT : Bouton de connexion avec état de chargement
+            //   AJOUT : Bouton de connexion avec état de chargement
             SizedBox(
               width: double.infinity,
               height: 48,
@@ -186,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 16),
 
-            // 🔥 AJOUT : Lien vers la page d'inscription
+            //   AJOUT : Lien vers la page d'inscription
             TextButton(
               onPressed: _isLoading
                   ? null
