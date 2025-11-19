@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../viewmodels/products_viewmodel.dart';
-import '../models/product.dart';
+import 'package:go_router/go_router.dart';
 import '../widgets/drawer.dart';
+import '../viewmodels/cart_viewmodel.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
@@ -23,6 +24,54 @@ class _ProductsPageState extends State<ProductsPage> {
         title: const Text('Produits'),
         backgroundColor: Colors.blue[600],
         foregroundColor: Colors.white,
+        actions: [
+          Consumer<CartViewModel>(
+          builder: (context, cart, child) {
+            return Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.shopping_cart),
+                    onPressed: () {
+                      context.go('/cart'); 
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Page Panier : Prochaine étape !'))
+                      );
+                    },
+                  ),
+                  if (cart.totalCount > 0)
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        constraints: const BoxConstraints(
+                          minWidth: 16,
+                          minHeight: 16,
+                        ),
+                        child: Text(
+                          '${cart.totalCount}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
       ),
       drawer: const AppDrawer(),
       // Ici on dit : "Je veux écouter ProductsViewModel"
@@ -71,74 +120,82 @@ class _ProductsPageState extends State<ProductsPage> {
               final product = viewModel.products[index]; // on récupère un produit de la liste
 
               return Card(
+                clipBehavior: Clip.antiAlias,
                 margin: const EdgeInsets.only(bottom: 16),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
+                child: InkWell(
+                  onTap: () {
+                    // Quand l’utilisateur clique sur une carte produit
+                    // On peut ajouter une navigation vers la page de détail ici
+                    context.go('/products/${product.id}');
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
 
-                      // 🖼️ Image du produit (avec cache et gestion erreur)
-                      CachedNetworkImage(
-                        imageUrl: product.image,
-                        width: 80,
-                        height: 80,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(
+                        // 🖼️ Image du produit (avec cache et gestion erreur)
+                        CachedNetworkImage(
+                          imageUrl: product.image,
                           width: 80,
                           height: 80,
-                          color: Colors.grey[200],
-                          child: const Center(child: CircularProgressIndicator()),
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Container(
+                            width: 80,
+                            height: 80,
+                            color: Colors.grey[200],
+                            child: const Center(child: CircularProgressIndicator()),
+                          ),
+                          errorWidget: (context, url, error) => Container(
+                            width: 80,
+                            height: 80,
+                            color: Colors.grey[200],
+                            child: const Icon(Icons.error),
+                          ),
                         ),
-                        errorWidget: (context, url, error) => Container(
-                          width: 80,
-                          height: 80,
-                          color: Colors.grey[200],
-                          child: const Icon(Icons.error),
-                        ),
-                      ),
 
-                      const SizedBox(width: 16),
+                        const SizedBox(width: 16),
 
-                      // ℹ️ Infos du produit (titre, prix, étoiles)
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // titre du produit
-                            Text(
-                              product.title,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                        // ℹ️ Infos du produit (titre, prix, étoiles)
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // titre du produit
+                              Text(
+                                product.title,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
 
-                            const SizedBox(height: 8),
+                              const SizedBox(height: 8),
 
-                            // prix formaté
-                            Text(
-                              product.formattedPrice,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green,
+                              // prix formaté
+                              Text(
+                                product.formattedPrice,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green,
+                                ),
                               ),
-                            ),
 
-                            const SizedBox(height: 4),
+                              const SizedBox(height: 4),
 
-                            // affichage des étoiles
-                            Text(
-                              product.starsDisplay,
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                          ],
+                              // affichage des étoiles
+                              Text(
+                                product.starsDisplay,
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            ],
                         ),
                       ),
                     ],
                   ),
+                ),
                 ),
               );
             },

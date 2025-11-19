@@ -34,5 +34,26 @@ class ApiService {                             // Classe service qui centralise 
       throw Exception('Impossible de charger les produits : $e');
       // On jette une nouvelle exception avec un message plus clair
     }
+
+  }
+
+  Future<Product> fetchProductById(int id) async {
+    // Méthode pour récupérer un produit par son ID
+
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/products/$id'),
+        headers: {'Content-Type': 'application/json'},
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonData = json.decode(response.body);
+        return Product.fromJson(jsonData);
+      } else {
+        throw Exception('Erreur serveur : ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Impossible de charger le produit : $e');
+    }
   }
 }

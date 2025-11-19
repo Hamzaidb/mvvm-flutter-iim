@@ -19,6 +19,7 @@ dependencies:
   provider: ^6.1.2              # State management MVVM
   http: ^1.2.1                  # Pour les appels API
   cached_network_image: ^3.3.1  # Images optimisées
+  go_router: ^13.0.0            # Navigation avancée
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
