@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "100089072838",
+    "project_id": "authecommerce-18bbd",
+    "storage_bucket": "authecommerce-18bbd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:100089072838:android:750f333454a86f5d83dbc7",
+        "android_client_info": {
+          "package_name": "com.example.vraiauth"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA80cCuzpltKgqqRTO-1DYy7FsWdn-I9Pw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
