@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // 🔥 AJOUT : Import Firebase Auth pour la connexion
 import 'package:firebase_auth/firebase_auth.dart';
 import '../widgets/drawer.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -60,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
         // Redirige vers l'accueil
-        Navigator.pushReplacementNamed(context, '/');
+        context.go('/');
       }
     } on FirebaseAuthException catch (e) {
       // 🔥 AJOUT : Gestion des erreurs spécifiques Firebase
@@ -189,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
             TextButton(
               onPressed: _isLoading
                   ? null
-                  : () => Navigator.pushReplacementNamed(context, '/register'),
+                  : () => context.go('/register'),
               child: const Text('Pas de compte ? S\'inscrire'),
             ),
           ],

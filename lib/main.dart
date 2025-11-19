@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:vraiauth/viewmodels/cart_viewmodel.dart';
 import 'providers/auth_provider.dart';
 import 'router.dart';
+import 'firebase_options.dart';
 
 // ViewModels imports
 import 'viewmodels/products_viewmodel.dart';
@@ -20,7 +21,9 @@ import 'pages/products_page.dart'; // 🔥 AJOUT : Nouvelle page produits
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
