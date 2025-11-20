@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'dart:io' show Platform; // Pour détecter la plateforme
+import 'package:flutter/foundation.dart' show kIsWeb; // Pour détecter le Web
+
 // Imports de vos pages
 import 'pages/home_page.dart';
 import 'pages/login_page.dart';
 import 'pages/register_page.dart';
 import 'pages/products_page.dart';
-import 'pages/second_page.dart';
-import 'pages/third_page.dart';
 import 'providers/auth_provider.dart';
 import 'pages/product_detail_page.dart';
 import 'pages/cart_page.dart';
 import 'pages/checkout_page.dart';
 import 'pages/profile_page.dart';
+import 'pages/product_detail_page_ios.dart';
 
 class AppRouter {
-  final AuthProvider authProvider;
+  final AppAuthProvider authProvider;
 
   AppRouter(this.authProvider);
 
@@ -63,25 +65,21 @@ class AppRouter {
         routes: [
           GoRoute(
             path: ':id',
-            builder: (context,state) {
+            builder: (context, state) {
               final id = int.tryParse(state.pathParameters['id']!);
               if (id == null) {
-                return const Scaffold(
-                  body: Center(child: Text('ID de produit invalide')),
-                );
+                return const Scaffold(body: Center(child: Text('ID invalide')));
               }
+
+              // Si on n'est pas sur le Web ET qu'on est sur iOS
+              if (!kIsWeb && Platform.isIOS) {
+                return ProductDetailPageIOS(productId: id);
+              }
+              // Sinon (Android, Web), on retourne la page Material standard
               return ProductDetailPage(productId: id);
-            }
+            },
           ),
         ],
-      ),
-      GoRoute(
-        path: '/second',
-        builder: (context, state) => const SecondPage(),
-      ),
-      GoRoute(
-        path: '/third',
-        builder: (context, state) => const ThirdPage(),
       ),
       GoRoute(
         path: '/cart',

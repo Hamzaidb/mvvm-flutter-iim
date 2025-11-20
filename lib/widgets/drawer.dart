@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import 'install_button.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -27,6 +28,8 @@ class AppDrawer extends StatelessWidget {
             onTap: () => context.go('/products'),
           ),
           const Divider(),
+          const InstallButton(),
+          const Divider(),
           ListTile(
             leading: const Icon(Icons.person, color: Color.fromARGB(255, 0, 0, 0)),
             title: const Text('Mon Profil'),
@@ -38,7 +41,7 @@ class AppDrawer extends StatelessWidget {
             title: const Text('Se déconnecter'),
             onTap: () {
               context.pop(); // Ferme le drawer
-              Provider.of<AuthProvider>(context, listen: false).signOut();
+              Provider.of<AppAuthProvider>(context, listen: false).signOut();
             },
           ),
         ],

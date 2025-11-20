@@ -10,7 +10,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final user = Provider.of<AuthProvider>(context).user; // Utilisateur courant
+    final user = Provider.of<AppAuthProvider>(context).user; // Utilisateur courant
 
     return Scaffold(
       appBar: AppBar(

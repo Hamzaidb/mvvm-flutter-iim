@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 //   AJOUT : Import Firebase Auth pour la connexion
 import 'package:firebase_auth/firebase_auth.dart';
+import '../providers/auth_provider.dart';
+import 'package:provider/provider.dart';
 import '../widgets/drawer.dart';
 import 'package:go_router/go_router.dart';
 
@@ -184,6 +186,37 @@ class _LoginPageState extends State<LoginPage> {
                     : const Text('Se connecter', style: TextStyle(fontSize: 16)),
               ),
             ),
+            const SizedBox(height: 16),
+
+            // 🔥 NOUVEAU BOUTON GOOGLE
+            SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: OutlinedButton.icon(
+                onPressed: _isLoading 
+                  ? null 
+                  : () async {
+                      setState(() => _isLoading = true);
+                      try {
+                        // Appel de la méthode du Provider
+                        await Provider.of<AppAuthProvider>(context, listen: false).signInWithGoogle();
+                        // La redirection est gérée automatiquement par le Router (authStateChanges)
+                      } catch (e) {
+                        setState(() {
+                          _errorMessage = "Erreur de connexion Google";
+                        });
+                      } finally {
+                        if (mounted) setState(() => _isLoading = false);
+                      }
+                    },
+                icon: const Icon(Icons.g_mobiledata, size: 32, color: Colors.red), // Icône G
+                label: const Text('Continuer avec Google', style: TextStyle(color: Colors.black)),
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: Colors.grey),
+                ),
+              ),
+            ),
+
             const SizedBox(height: 16),
 
             //   AJOUT : Lien vers la page d'inscription

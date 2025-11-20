@@ -7,10 +7,12 @@ import 'package:vraiauth/viewmodels/orders_viewmodel.dart';
 import 'providers/auth_provider.dart';
 import 'router.dart';
 import 'firebase_options.dart';
+import 'package:pwa_install/pwa_install.dart';
 
 // ViewModels imports
 import 'viewmodels/products_viewmodel.dart';
 import 'viewmodels/orders_viewmodel.dart';
+
 
 /* Pages imports
 import 'pages/home_page.dart';
@@ -23,6 +25,11 @@ import 'pages/products_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  PWAInstall().setup(installCallback: () {
+    debugPrint('APP INSTALLED!');
+  });
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -40,9 +47,9 @@ class MyApp extends StatelessWidget {
         // 🛍️ ViewModel des produits (MVVM)
         ChangeNotifierProvider(create: (_) => ProductsViewModel()),
         //  Autres ViewModels à ajouter plus tard (auth, panier, etc.)
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => AppAuthProvider()),
         ChangeNotifierProvider(create: (_) => CartViewModel()),
-        ProxyProvider<AuthProvider, AppRouter>(
+        ProxyProvider<AppAuthProvider, AppRouter>(
           update: (_, authProvider, __) => AppRouter(authProvider),
         ),
         ChangeNotifierProvider(create: (_) => OrdersViewModel()),

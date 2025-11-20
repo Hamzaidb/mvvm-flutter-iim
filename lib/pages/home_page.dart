@@ -382,7 +382,7 @@ class DiscountBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 1. Récupération de l'utilisateur depuis le Provider
-    final user = Provider.of<AuthProvider>(context).user;
+    final user = Provider.of<AppAuthProvider>(context).user;
     
     // 2. Logique pour le nom d'affichage
     String displayName = "Invité";

@@ -3,11 +3,21 @@ import 'package:provider/provider.dart';
 import '../viewmodels/product_detail_viewmodel.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../viewmodels/cart_viewmodel.dart';
+import 'package:share_plus/share_plus.dart';
+import '../models/product.dart';
 
 class ProductDetailPage extends StatelessWidget {
   final int productId;
 
   const ProductDetailPage({super.key, required this.productId});
+
+  void _shareProduct(BuildContext context, Product product) {
+    // On construit le message à envoyer
+    final String message = "Regarde ce produit incroyable : ${product.title} à seulement ${product.formattedPrice} !";
+    
+    // Lance le partage natif (Android/iOS)
+    Share.share(message);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +27,18 @@ class ProductDetailPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Détail du Produit'),
+          actions: [Consumer<ProductDetailViewmodel>(
+              builder: (context, viewModel, child) {
+                // On n'affiche le bouton que si le produit est chargé
+                if (viewModel.product == null) return const SizedBox();
+                
+                return IconButton(
+                  icon: const Icon(Icons.share),
+                  onPressed: () => _shareProduct(context, viewModel.product!),
+                );
+              },
+            ),
+          ],
         ),
         body: Consumer<ProductDetailViewmodel>(
           builder: (context, viewmodel, child) {
