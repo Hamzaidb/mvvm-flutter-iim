@@ -1,1 +1,36 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"fluttershop-iim","appId":"1:711026496506:android:bafd298e53921509454a43","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"fluttershop-iim","configurations":{"android":"1:711026496506:android:bafd298e53921509454a43","web":"1:711026496506:web:859579032cf2d3ed454a43"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "fluttershop-iim",
+          "appId": "1:711026496506:android:bafd298e53921509454a43",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "fluttershop-iim",
+          "configurations": {
+            "android": "1:711026496506:android:bafd298e53921509454a43",
+            "web": "1:711026496506:web:859579032cf2d3ed454a43"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
